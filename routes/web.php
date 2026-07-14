@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PeerRequestController;
+use App\Http\Controllers\LikeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,12 +18,6 @@ Route::get('/', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
-
-    // Peer Requests
-Route::get('/peer-requests', [PeerRequestController::class, 'index'])->name('peer_requests.index');
-Route::post('/peer-requests/send/{user}', [PeerRequestController::class, 'send'])->name('peer_requests.send');
-Route::post('/peer-requests/{request}/accept', [PeerRequestController::class, 'accept'])->name('peer_requests.accept');
-Route::post('/peer-requests/{request}/decline', [PeerRequestController::class, 'decline'])->name('peer_requests.decline');
 
 Route::middleware('auth')->group(function () {
     //profile
@@ -37,6 +32,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
+    //likes
+    Route::post('/posts/{post}/like', [LikeController::class, 'toggle'])->name('posts.like');
+
     //profile
     Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
 
@@ -48,6 +46,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/conversations/start/{user}', [ConversationController::class, 'start'])->name('conversations.start');
     Route::get('/conversations/{conversation}', [ConversationController::class, 'show'])->name('conversations.show');
     Route::post('/conversations/{conversation}/send', [ConversationController::class, 'send'])->name('conversations.send');
+
+    //peer requests
+    Route::get('/peer-requests', [PeerRequestController::class, 'index'])->name('peer_requests.index');
+    Route::post('/peer-requests/send/{user}', [PeerRequestController::class, 'send'])->name('peer_requests.send');
+    Route::post('/peer-requests/{request}/accept', [PeerRequestController::class, 'accept'])->name('peer_requests.accept');
+    Route::post('/peer-requests/{request}/decline', [PeerRequestController::class, 'decline'])->name('peer_requests.decline');
 });
 
 require __DIR__.'/auth.php';

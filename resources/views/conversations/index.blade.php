@@ -10,7 +10,7 @@
             $last = $lastByConversation[$c->id] ?? null;
         @endphp
         <a href="{{ route('conversations.show', $c) }}"
-           class="block bg-white border rounded-xl p-4 mb-3 hover:bg-gray-50">
+           class="block bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl p-4 mb-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
             <div class="flex items-center justify-between">
                 <div class="font-semibold">{{ $other?->name ?? 'Unknown' }}</div>
 
@@ -21,16 +21,16 @@
                 @endif
             </div>
             @if($last)
-                <div class="text-sm text-gray-600 mt-1">
+                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
                     {{ $last->sender_id === $me ? 'You: ' : '' }}{{ \Illuminate\Support\Str::limit($last->body, 70) }}
                 </div>
-                <div class="text-xs text-gray-400 mt-0.5">
+                <div class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
                     {{ $last->created_at->diffForHumans() }}
                 </div>
             @endif
         </a>
     @empty
-        <p class="text-gray-500">No conversations yet.</p>
+        <p class="text-gray-500 dark:text-gray-400">No conversations yet.</p>
     @endforelse
 </div>
 @endsection

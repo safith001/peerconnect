@@ -25,9 +25,9 @@ class PeerRequestController extends Controller
             $q->where('sender_id', $user->id)->where('receiver_id', $me);
         })->first();
 
-        //if ($exists) {
-       //     return back()->with('error', 'Request already exists');
-       // }
+        if ($exists) {
+            return back()->with('error', 'Request already exists');
+        }
 
         PeerRequest::create([
             'sender_id' => $me,

@@ -1,0 +1,91 @@
+
+   PASS  Tests\Unit\ExampleTest
+  Γ£ô that true is true                                                                                            0.02s  
+
+   PASS  Tests\Feature\Auth\AuthenticationTest
+  Γ£ô login screen can be rendered                                                                                 0.70s  
+  Γ£ô users can authenticate using the login screen                                                                0.09s  
+  Γ£ô users can not authenticate with invalid password                                                             0.24s  
+  Γ£ô users can logout                                                                                             0.02s  
+
+   PASS  Tests\Feature\Auth\EmailVerificationTest
+  Γ£ô email verification screen can be rendered                                                                    0.03s  
+  Γ£ô email can be verified                                                                                        0.04s  
+  Γ£ô email is not verified with invalid hash                                                                      0.03s  
+
+   PASS  Tests\Feature\Auth\PasswordConfirmationTest
+  Γ£ô confirm password screen can be rendered                                                                      0.04s  
+  Γ£ô password can be confirmed                                                                                    0.02s  
+  Γ£ô password is not confirmed with invalid password                                                              0.24s  
+
+   PASS  Tests\Feature\Auth\PasswordResetTest
+  Γ£ô reset password link screen can be rendered                                                                   0.03s  
+  Γ£ô reset password link can be requested                                                                         0.24s  
+  Γ£ô reset password screen can be rendered                                                                        0.24s  
+  Γ£ô password can be reset with valid token                                                                       0.24s  
+
+   PASS  Tests\Feature\Auth\PasswordUpdateTest
+  Γ£ô password can be updated                                                                                      0.03s  
+  Γ£ô correct password must be provided to update password                                                         0.03s  
+
+   PASS  Tests\Feature\Auth\RegistrationTest
+  Γ£ô registration screen can be rendered                                                                          0.03s  
+  Γ£ô new users can register                                                                                       0.03s  
+
+   PASS  Tests\Feature\CommentTest
+  Γ£ô guest cannot comment                                                                                         0.03s  
+  Γ£ô authenticated user can comment on a post                                                                     0.03s  
+  Γ£ô comment requires body                                                                                        0.03s  
+  Γ£ô owner can delete their comment                                                                               0.02s  
+  Γ£ô non-owner cannot delete a comment                                                                            0.03s  
+
+   PASS  Tests\Feature\ConversationTest
+  Γ£ô guest cannot access conversations                                                                            0.03s  
+  Γ£ô user can view their conversations                                                                            0.03s  
+  Γ£ô user can start conversation with a peer                                                                      0.02s  
+  Γ£ô user can send a message in their conversation                                                                0.03s  
+  Γ£ô user cannot view conversation they are not part of                                                           0.03s  
+  Γ£ô conversation shows messages                                                                                  0.04s  
+
+   PASS  Tests\Feature\ExampleTest
+  Γ£ô it returns a successful response                                                                             0.03s  
+
+   PASS  Tests\Feature\LikeTest
+  Γ£ô guest cannot like a post                                                                                     0.03s  
+  Γ£ô authenticated user can like a post                                                                           0.02s  
+  Γ£ô liking toggles (unlike on second click)                                                                      0.03s  
+  Γ£ô post shows like count                                                                                        0.02s  
+
+   PASS  Tests\Feature\PeerRequestTest
+  Γ£ô guest cannot access peer requests                                                                            0.02s  
+  Γ£ô authenticated user can send a peer request                                                                   0.03s  
+  Γ£ô cannot send peer request to self                                                                             0.02s  
+  Γ£ô cannot send duplicate peer request                                                                           0.03s  
+  Γ£ô receiver can accept a peer request                                                                           0.03s  
+  Γ£ô only receiver can accept a request                                                                           0.03s  
+  Γ£ô receiver can decline a peer request                                                                          0.03s  
+  Γ£ô accepted users are peers                                                                                     0.02s  
+  Γ£ô pending users are not peers                                                                                  0.02s  
+  Γ£ô declined users are not peers                                                                                 0.02s  
+
+   PASS  Tests\Feature\PostTest
+  Γ£ô guest cannot access posts                                                                                    0.03s  
+  Γ£ô posts index shows all posts                                                                                  0.04s  
+  Γ£ô posts show displays a single post                                                                            0.04s  
+  Γ£ô authenticated user can create a post                                                                         0.03s  
+  Γ£ô post creation requires title and content                                                                     0.02s  
+  Γ£ô owner can edit their post                                                                                    0.02s  
+  Γ£ô non-owner cannot edit a post                                                                                 0.03s  
+  Γ£ô owner can delete their post                                                                                  0.02s  
+  Γ£ô non-owner cannot delete a post                                                                               0.04s  
+
+   PASS  Tests\Feature\ProfileTest
+  Γ£ô profile page is displayed                                                                                    0.05s  
+  Γ£ô profile information can be updated                                                                           0.02s  
+  Γ£ô email verification status is unchanged when the email address is unchanged                                   0.03s  
+  Γ£ô user can delete their account                                                                                0.03s  
+  Γ£ô correct password must be provided to delete account                                                          0.02s  
+
+  Tests:    59 passed (136 assertions)
+  Duration: 3.96s
+

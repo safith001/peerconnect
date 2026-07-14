@@ -62,6 +62,11 @@ class User extends Authenticatable
         return $this->hasMany(Message::class, 'sender_id'); // standardized: was 'user_id'
     }
 
+    public function likedPosts()
+    {
+        return $this->belongsToMany(Post::class, 'likes')->withTimestamps();
+    }
+
     // Peer requests
     public function sentRequests()
     {
@@ -77,15 +82,15 @@ class User extends Authenticatable
     public function isPeerWith(User $other): bool
     {
         return \App\Models\PeerRequest::query()
+            ->where('status', 'accepted')
             ->where(function ($q) use ($other) {
                 $q->where('sender_id', $this->id)
-                  ->where('receiver_id', $other->id);
+                  ->where('receiver_id', $other->id)
+                  ->orWhere(function ($q) use ($other) {
+                      $q->where('sender_id', $other->id)
+                        ->where('receiver_id', $this->id);
+                  });
             })
-            ->orWhere(function ($q) use ($other) {
-                $q->where('sender_id', $other->id)
-                  ->where('receiver_id', $this->id);
-            })
-            ->where('status', 'accepted')
             ->exists();
     }
 }
