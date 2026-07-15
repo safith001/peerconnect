@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\PeerRequest;
 use Illuminate\Http\Request;
 use \Illuminate\Support\Facades\Auth;
 
@@ -44,8 +45,16 @@ class UserController extends Controller
             ->orderBy('name');
 
         if (Auth::check()) {
-    $query->where('id', '!=', Auth::id());
-}
+            $query->where('id', '!=', Auth::id());
+        }
+
+        $query->where('role', '!=', 'admin');
+
+        if (Auth::check()) {
+            $blockedIds = Auth::user()->blocks()->pluck('blocked_id');
+            $blockedByIds = Auth::user()->blockedBy()->pluck('blocker_id');
+            $query->whereNotIn('id', $blockedIds->merge($blockedByIds));
+        }
 
         $users = $query->paginate(10)->withQueryString();
 
@@ -53,5 +62,26 @@ class UserController extends Controller
         $departments = User::select('department')->whereNotNull('department')->distinct()->pluck('department');
 
         return view('users.index', compact('users', 'faculties', 'departments'));
+    }
+
+    public function connections()
+    {
+        $me = Auth::id();
+
+        $peerIds = PeerRequest::where('status', 'accepted')
+            ->where(function ($q) use ($me) {
+                $q->where('sender_id', $me)
+                  ->orWhere('receiver_id', $me);
+            })
+            ->get()
+            ->map(function ($req) use ($me) {
+                return $req->sender_id === $me ? $req->receiver_id : $req->sender_id;
+            })
+            ->unique()
+            ->values();
+
+        $peers = User::whereIn('id', $peerIds)->orderBy('name')->get();
+
+        return view('connections.index', compact('peers'));
     }
 }

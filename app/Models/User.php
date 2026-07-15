@@ -78,6 +78,40 @@ class User extends Authenticatable
         return $this->hasMany(PeerRequest::class, 'receiver_id');
     }
 
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function blocks()
+    {
+        return $this->hasMany(Block::class, 'blocker_id');
+    }
+
+    public function blockedBy()
+    {
+        return $this->hasMany(Block::class, 'blocked_id');
+    }
+
+    public function hasBlocked(User $user): bool
+    {
+        return Block::where('blocker_id', $this->id)
+            ->where('blocked_id', $user->id)
+            ->exists();
+    }
+
+    public function isBlockedBy(User $user): bool
+    {
+        return Block::where('blocker_id', $user->id)
+            ->where('blocked_id', $this->id)
+            ->exists();
+    }
+
+    public function isBlockedFrom(User $user): bool
+    {
+        return $this->hasBlocked($user) || $this->isBlockedBy($user);
+    }
+
     // Check if this user is peer with another user
     public function isPeerWith(User $other): bool
     {

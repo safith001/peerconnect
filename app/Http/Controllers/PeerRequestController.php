@@ -18,6 +18,10 @@ class PeerRequestController extends Controller
             return back()->with('error', 'You cannot send request to yourself');
         }
 
+        if (Auth::user()->isBlockedFrom($user)) {
+            return back()->with('error', 'Unable to send request.');
+        }
+
         // Check if already exists
         $exists = PeerRequest::where(function ($q) use ($me, $user) {
             $q->where('sender_id', $me)->where('receiver_id', $user->id);
@@ -57,6 +61,29 @@ class PeerRequestController extends Controller
 
         $request->update(['status' => 'declined']);
         return back()->with('success', 'Peer request declined');
+    }
+
+    // Unfriend a peer (delete the accepted request)
+    public function unfriend(User $user)
+    {
+        $me = Auth::id();
+
+        $peerRequest = PeerRequest::where('status', 'accepted')
+            ->where(function ($q) use ($me, $user) {
+                $q->where('sender_id', $me)->where('receiver_id', $user->id)
+                  ->orWhere(function ($q) use ($me, $user) {
+                      $q->where('sender_id', $user->id)->where('receiver_id', $me);
+                  });
+            })
+            ->first();
+
+        if (! $peerRequest) {
+            return back()->with('error', 'You are not connected with this user.');
+        }
+
+        $peerRequest->delete();
+
+        return back()->with('success', 'Unfriended successfully.');
     }
 
     // Show my requests

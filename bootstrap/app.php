@@ -5,6 +5,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
 // If these providers exist in your app, keep them. If any is missing, remove that line.
+use App\Providers\AdminServiceProvider;
 use App\Providers\AppServiceProvider;
 use App\Providers\AuthServiceProvider;
 use App\Providers\RouteServiceProvider;
@@ -14,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         AppServiceProvider::class,
         AuthServiceProvider::class, // needed for policies
         RouteServiceProvider::class,
+        AdminServiceProvider::class,
     ])
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
@@ -21,7 +23,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'admin' => \Admin\Middleware\CheckAdmin::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

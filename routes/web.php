@@ -9,6 +9,8 @@ use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PeerRequestController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\BlockController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -52,6 +54,20 @@ Route::middleware('auth')->group(function () {
     Route::post('/peer-requests/send/{user}', [PeerRequestController::class, 'send'])->name('peer_requests.send');
     Route::post('/peer-requests/{request}/accept', [PeerRequestController::class, 'accept'])->name('peer_requests.accept');
     Route::post('/peer-requests/{request}/decline', [PeerRequestController::class, 'decline'])->name('peer_requests.decline');
+
+    //reports
+    Route::post('/report/post/{post}', [ReportController::class, 'storePost'])->name('report.post');
+    Route::post('/report/comment/{comment}', [ReportController::class, 'storeComment'])->name('report.comment');
+
+    //connections
+    Route::get('/connections', [UserController::class, 'connections'])->name('connections.index');
+
+    //unfriend
+    Route::post('/unfriend/{user}', [PeerRequestController::class, 'unfriend'])->name('peer_requests.unfriend');
+
+    //block / unblock
+    Route::post('/block/{user}', [BlockController::class, 'store'])->name('block');
+    Route::post('/unblock/{user}', [BlockController::class, 'destroy'])->name('unblock');
 });
 
 require __DIR__.'/auth.php';

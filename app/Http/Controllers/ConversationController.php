@@ -52,6 +52,10 @@ public function start(User $user)
         return back()->with('error', 'You can only start a conversation with accepted peers.');
     }
 
+    if ($me->isBlockedFrom($user)) {
+        return redirect()->route('conversations.index')->with('error', 'Unable to start conversation.');
+    }
+
     [$a, $b] = $me->id < $user->id ? [$me->id, $user->id] : [$user->id, $me->id];
 
     $conversation = Conversation::firstOrCreate([
@@ -72,7 +76,11 @@ public function show(Conversation $conversation)
 
     // ✅ Only allow viewing if they are accepted peers
     if (!$me->isPeerWith($other)) {
-        return back()->with('error', 'You can only chat with accepted peers.');
+        return redirect()->route('conversations.index')->with('error', 'You can only chat with accepted peers.');
+    }
+
+    if ($me->isBlockedFrom($other)) {
+        return redirect()->route('conversations.index')->with('error', 'This conversation is not available.');
     }
 
     // Mark all messages FROM the other person TO me as read now
@@ -108,6 +116,10 @@ public function send(Request $request, Conversation $conversation)
     // ✅ Only allow sending if they are accepted peers
     if (!$me->isPeerWith($other)) {
         return back()->with('error', 'You can only message accepted peers.');
+    }
+
+    if ($me->isBlockedFrom($other)) {
+        return back()->with('error', 'Unable to send message.');
     }
 
     $request->validate([

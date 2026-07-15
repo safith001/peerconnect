@@ -2,17 +2,19 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use App\View\Composers\PeerRequestComposer;
 
 class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        // leave empty (or your bindings)
+        //
     }
 
     public function boot(): void
     {
-        // leave empty
+        View::composer(['layouts.navbar', 'layouts.sidebar'], PeerRequestComposer::class);
     }
 }

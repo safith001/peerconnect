@@ -46,12 +46,6 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        // 🔹 Peer Requests
-        $pendingRequests = PeerRequest::where('receiver_id', $user->id)
-            ->where('status', 'pending')
-            ->with('sender')
-            ->get();
-
         return view('dashboard', compact(
             'totalPosts',
             'connections',
@@ -60,8 +54,7 @@ class DashboardController extends Controller
             'profileViews',
             'profileCompletion',
             'recentPosts',
-            'recentMessages',
-            'pendingRequests'
+            'recentMessages'
         ));
     }
 }
